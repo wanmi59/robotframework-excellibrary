@@ -45,3 +45,8 @@ Version 0.0.2
 	- Subtract Fom Date               | Using the sheet name the number of days are subtracted from the date in the indicated cell.
 	- Save Excel                      | Saves the Excel file indicated by file name, the useTempDir can be set to true if the user needs the file saved in the temporary directory.
 										If the boolean useTempDir is set to true, depending on the operating system of the computer running the test the file will be saved in the Temp directory if the operating system is Windows or tmp directory if it is not.
+
+
+Version 0.1.0
+-------------
+- Added support for Python 3
