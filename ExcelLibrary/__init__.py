@@ -14,10 +14,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from ExcelLibrary import ExcelLibrary
-from version import VERSION
-
-_version_ = VERSION
+from .ExcelLibrary import ExcelLibrary
 
 
 class ExcelLibrary(ExcelLibrary):
@@ -26,4 +23,5 @@ class ExcelLibrary(ExcelLibrary):
     opening, reading, writing, and saving Excel files
     from Robot Framework.
     """
-    ROBOT_LIBRARY_SCOPE = 'GLOBAL'
+
+    ROBOT_LIBRARY_SCOPE = "GLOBAL"
