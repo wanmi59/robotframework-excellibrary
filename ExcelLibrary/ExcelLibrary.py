@@ -19,14 +19,22 @@ import os
 import natsort
 from operator import itemgetter
 from datetime import datetime, timedelta
-from xlrd import open_workbook, cellname, xldate_as_tuple, \
-    XL_CELL_NUMBER, XL_CELL_DATE, XL_CELL_TEXT, XL_CELL_BOOLEAN, \
-    XL_CELL_ERROR, XL_CELL_BLANK, XL_CELL_EMPTY, error_text_from_code
+from xlrd import (
+    open_workbook,
+    cellname,
+    xldate_as_tuple,
+    XL_CELL_NUMBER,
+    XL_CELL_DATE,
+    XL_CELL_TEXT,
+    XL_CELL_BOOLEAN,
+    XL_CELL_ERROR,
+    XL_CELL_BLANK,
+    XL_CELL_EMPTY,
+    error_text_from_code,
+)
 from xlwt import easyxf, Workbook
 from xlutils.copy import copy as copy
-from version import VERSION
-
-_version_ = VERSION
+from .version import VERSION
 
 
 class ExcelLibrary:
@@ -44,24 +52,24 @@ class ExcelLibrary:
 
     """
 
-    ROBOT_LIBRARY_SCOPE = 'GLOBAL'
+    ROBOT_LIBRARY_SCOPE = "GLOBAL"
     ROBOT_LIBRARY_VERSION = VERSION
 
     def __init__(self):
         self.wb = None
         self.tb = None
-        self.sheetNum = None
-        self.sheetNames = None
-        self.fileName = None
-        if os.name is "nt":
-            self.tmpDir = "Temp"
+        self.sheet_num = None
+        self.sheet_names = None
+        self.filename = None
+        if os.name == "nt":
+            self.tmpdir = "Temp"
         else:
-            self.tmpDir = "tmp"
+            self.tmpdir = "tmp"
 
-    def open_excel(self, filename, useTempDir=False):
+    def open_excel(self, filename, use_tempdir=False):
         """
         Opens the Excel file from the path provided in the file name parameter.
-        If the boolean useTempDir is set to true, depending on the operating system of the computer running the test the file will be opened in the Temp directory if the operating system is Windows or tmp directory if it is not.
+        If the boolean use_tempdir is set to true, depending on the operating system of the computer running the test the file will be opened in the Temp directory if the operating system is Windows or tmp directory if it is not.
 
         Arguments:
                 |  File Name (string)                      | The file name string value that will be used to open the excel file to perform tests upon.                                  |
@@ -69,16 +77,20 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*           |  *Parameters*                                      |
-        | Open Excel           |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |
+        | Open Excel           |  .\\ExcelRobotTest.xls  |
 
         """
-        if useTempDir is True:
-            print 'Opening file at %s' % filename
-            self.wb = open_workbook(os.path.join("/", self.tmpDir, filename), formatting_info=True, on_demand=True)
+        if use_tempdir is True:
+            print(f"Opening file at {filename}")
+            self.wb = open_workbook(
+                os.path.join("/", self.tmpdir, filename),
+                formatting_info=True,
+                on_demand=True,
+            )
         else:
             self.wb = open_workbook(filename, formatting_info=True, on_demand=True)
-        self.fileName = filename
-        self.sheetNames = self.wb.sheet_names()
+        self.filename = filename
+        self.sheet_names = self.wb.sheet_names()
 
     def open_excel_current_directory(self, filename):
         """
@@ -93,9 +105,11 @@ class ExcelLibrary:
 
         """
         workdir = os.getcwd()
-        print 'Opening file at %s' % filename
-        self.wb = open_workbook(os.path.join(workdir, filename), formatting_info=True, on_demand=True)
-        self.sheetNames = self.wb.sheet_names()
+        print(f"Opening file at {filename}")
+        self.wb = open_workbook(
+            os.path.join(workdir, filename), formatting_info=True, on_demand=True
+        )
+        self.sheet_names = self.wb.sheet_names()
 
     def get_sheet_names(self):
         """
@@ -104,12 +118,12 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*              |  *Parameters*                                      |
-        | Open Excel              |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |
+        | Open Excel              |  .\\ExcelRobotTest.xls  |
         | Get Sheets Names        |                                                    |
 
         """
-        sheetNames = self.wb.sheet_names()
-        return sheetNames
+        sheet_names = self.wb.sheet_names()
+        return sheet_names
 
     def get_number_of_sheets(self):
         """
@@ -118,12 +132,12 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*              |  *Parameters*                                      |
-        | Open Excel              |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |
+        | Open Excel              |  .\\ExcelRobotTest.xls  |
         | Get Number of Sheets    |                                                    |
 
         """
-        sheetNum = self.wb.nsheets
-        return sheetNum
+        sheet_num = self.wb.nsheets
+        return sheet_num
 
     def get_column_count(self, sheetname):
         """
@@ -134,7 +148,7 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*          |  *Parameters*                                      |
-        | Open Excel          |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |
+        | Open Excel          |  .\\ExcelRobotTest.xls  |
         | Get Column Count    |  TestSheet1                                        |
 
         """
@@ -150,14 +164,14 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*          |  *Parameters*                                      |
-        | Open Excel          |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |
+        | Open Excel          |  .\\ExcelRobotTest.xls  |
         | Get Row Count       |  TestSheet1                                        |
 
         """
         sheet = self.wb.sheet_by_name(sheetname)
         return sheet.nrows
 
-    def get_column_values(self, sheetname, column, includeEmptyCells=True):
+    def get_column_values(self, sheetname, column, include_empty_cells=True):
         """
         Returns the specific column values of the sheet name specified.
 
@@ -168,26 +182,26 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*           |  *Parameters*                                          |
-        | Open Excel           |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |   |
+        | Open Excel           |  .\\ExcelRobotTest.xls  |   |
         | Get Column Values    |  TestSheet1                                        | 0 |
 
         """
-        my_sheet_index = self.sheetNames.index(sheetname)
+        my_sheet_index = self.sheet_names.index(sheetname)
         sheet = self.wb.sheet_by_index(my_sheet_index)
         data = {}
         for row_index in range(sheet.nrows):
             cell = cellname(row_index, int(column))
             value = sheet.cell(row_index, int(column)).value
             data[cell] = value
-        if includeEmptyCells is True:
-            sortedData = natsort.natsorted(data.items(), key=itemgetter(0))
-            return sortedData
+        if include_empty_cells is True:
+            sorted_data = natsort.natsorted(data.items(), key=itemgetter(0))
+            return sorted_data
         else:
             data = dict([(k, v) for (k, v) in data.items() if v])
-            OrderedData = natsort.natsorted(data.items(), key=itemgetter(0))
-            return OrderedData
+            ordered_data = natsort.natsorted(data.items(), key=itemgetter(0))
+            return ordered_data
 
-    def get_row_values(self, sheetname, row, includeEmptyCells=True):
+    def get_row_values(self, sheetname, row, include_empty_cells=True):
         """
         Returns the specific row values of the sheet name specified.
 
@@ -198,26 +212,26 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*           |  *Parameters*                                          |
-        | Open Excel           |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |   |
+        | Open Excel           |  .\\ExcelRobotTest.xls  |   |
         | Get Row Values       |  TestSheet1                                        | 0 |
 
         """
-        my_sheet_index = self.sheetNames.index(sheetname)
+        my_sheet_index = self.sheet_names.index(sheetname)
         sheet = self.wb.sheet_by_index(my_sheet_index)
         data = {}
         for col_index in range(sheet.ncols):
             cell = cellname(int(row), col_index)
             value = sheet.cell(int(row), col_index).value
             data[cell] = value
-        if includeEmptyCells is True:
-            sortedData = natsort.natsorted(data.items(), key=itemgetter(0))
-            return sortedData
+        if include_empty_cells is True:
+            sorted_data = natsort.natsorted(data.items(), key=itemgetter(0))
+            return sorted_data
         else:
             data = dict([(k, v) for (k, v) in data.items() if v])
-            OrderedData = natsort.natsorted(data.items(), key=itemgetter(0))
-            return OrderedData
+            ordered_data = natsort.natsorted(data.items(), key=itemgetter(0))
+            return ordered_data
 
-    def get_sheet_values(self, sheetname, includeEmptyCells=True):
+    def get_sheet_values(self, sheetname, include_empty_cells=True):
         """
         Returns the values from the sheet name specified.
 
@@ -227,11 +241,11 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*           |  *Parameters*                                      |
-        | Open Excel           |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |
+        | Open Excel           |  .\\ExcelRobotTest.xls  |
         | Get Sheet Values     |  TestSheet1                                        |
 
         """
-        my_sheet_index = self.sheetNames.index(sheetname)
+        my_sheet_index = self.sheet_names.index(sheetname)
         sheet = self.wb.sheet_by_index(my_sheet_index)
         data = {}
         for row_index in range(sheet.nrows):
@@ -239,15 +253,15 @@ class ExcelLibrary:
                 cell = cellname(row_index, col_index)
                 value = sheet.cell(row_index, col_index).value
                 data[cell] = value
-        if includeEmptyCells is True:
-            sortedData = natsort.natsorted(data.items(), key=itemgetter(0))
-            return sortedData
+        if include_empty_cells is True:
+            sorted_data = natsort.natsorted(data.items(), key=itemgetter(0))
+            return sorted_data
         else:
             data = dict([(k, v) for (k, v) in data.items() if v])
-            OrderedData = natsort.natsorted(data.items(), key=itemgetter(0))
-            return OrderedData
+            ordered_data = natsort.natsorted(data.items(), key=itemgetter(0))
+            return ordered_data
 
-    def get_workbook_values(self, includeEmptyCells=True):
+    def get_workbook_values(self, include_empty_cells=True):
         """
         Returns the values from each sheet of the current workbook.
 
@@ -256,14 +270,14 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*           |  *Parameters*                                      |
-        | Open Excel           |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |
+        | Open Excel           |  .\\ExcelRobotTest.xls  |
         | Get Workbook Values  |                                                    |
 
         """
         sheetData = []
         workbookData = []
-        for sheet_name in self.sheetNames:
-            if includeEmptyCells is True:
+        for sheet_name in self.sheet_names:
+            if include_empty_cells is True:
                 sheetData = self.get_sheet_values(sheet_name)
             else:
                 sheetData = self.get_sheet_values(sheet_name, False)
@@ -281,11 +295,11 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*           |  *Parameters*                                             |
-        | Open Excel           |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |      |
+        | Open Excel           |  .\\ExcelRobotTest.xls  |      |
         | Get Cell Data        |  TestSheet1                                        |  A2  |
 
         """
-        my_sheet_index = self.sheetNames.index(sheetname)
+        my_sheet_index = self.sheet_names.index(sheetname)
         sheet = self.wb.sheet_by_index(my_sheet_index)
         for row_index in range(sheet.nrows):
             for col_index in range(sheet.ncols):
@@ -305,11 +319,11 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*     |  *Parameters*                                              |
-        | Open Excel     |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |   |   |
+        | Open Excel     |  .\\ExcelRobotTest.xls  |   |   |
         | Read Cell      |  TestSheet1                                        | 0 | 0 |
 
         """
-        my_sheet_index = self.sheetNames.index(sheetname)
+        my_sheet_index = self.sheet_names.index(sheetname)
         sheet = self.wb.sheet_by_index(my_sheet_index)
         cellValue = sheet.cell(int(row), int(column)).value
         return cellValue
@@ -325,29 +339,29 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*           |  *Parameters*                                              |
-        | Open Excel           |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |   |   |
+        | Open Excel           |  .\\ExcelRobotTest.xls  |   |   |
         | Check Cell Type      |  TestSheet1                                        | 0 | 0 |
 
         """
-        my_sheet_index = self.sheetNames.index(sheetname)
+        my_sheet_index = self.sheet_names.index(sheetname)
         sheet = self.wb.sheet_by_index(my_sheet_index)
         cell = self.wb.get_sheet(my_sheet_index).cell(int(row), int(column))
         if cell.ctype is XL_CELL_NUMBER:
-            print "The cell value is a number"
+            print("The cell value is a number")
         elif cell.ctype is XL_CELL_TEXT:
-            print "The cell value is a string"
+            print("The cell value is a string")
         elif cell.ctype is XL_CELL_DATE:
-            print "The cell value is a date"
+            print("The cell value is a date")
         elif cell.ctype is XL_CELL_BOOLEAN:
-            print "The cell value is a boolean operator"
+            print("The cell value is a boolean operator")
         elif cell.ctype is XL_CELL_ERROR:
-            print "The cell value has an error"
+            print("The cell value has an error")
         elif cell.ctype is XL_CELL_BLANK:
-            print "The cell value is blank"
+            print("The cell value is blank")
         elif cell.ctype is XL_CELL_EMPTY:
-            print "The cell value is empty"
+            print("The cell value is empty")
         else:
-            print error_text_from_code[sheet.cell(row, column).value]
+            print(error_text_from_code[sheet.cell(row, column).value])
 
     def put_number_to_cell(self, sheetname, column, row, value):
         """
@@ -361,20 +375,22 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*           |  *Parameters*                                                         |
-        | Open Excel           |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |     |     |      |
+        | Open Excel           |  .\\ExcelRobotTest.xls  |     |     |      |
         | Put Number To Cell   |  TestSheet1                                        |  0  |  0  |  34  |
 
         """
         if self.wb:
-            my_sheet_index = self.sheetNames.index(sheetname)
+            my_sheet_index = self.sheet_names.index(sheetname)
             cell = self.wb.get_sheet(my_sheet_index).cell(int(row), int(column))
             if cell.ctype is XL_CELL_NUMBER:
                 self.wb.sheets()
                 if not self.tb:
                     self.tb = copy(self.wb)
         if self.tb:
-            plain = easyxf('')
-            self.tb.get_sheet(my_sheet_index).write(int(row), int(column), float(value), plain)
+            plain = easyxf("")
+            self.tb.get_sheet(my_sheet_index).write(
+                int(row), int(column), float(value), plain
+            )
 
     def put_string_to_cell(self, sheetname, column, row, value):
         """
@@ -388,19 +404,19 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*           |  *Parameters*                                                           |
-        | Open Excel           |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |     |     |        |
+        | Open Excel           |  .\\ExcelRobotTest.xls  |     |     |        |
         | Put String To Cell   |  TestSheet1                                        |  0  |  0  |  Hello |
 
         """
         if self.wb:
-            my_sheet_index = self.sheetNames.index(sheetname)
+            my_sheet_index = self.sheet_names.index(sheetname)
             cell = self.wb.get_sheet(my_sheet_index).cell(int(row), int(column))
             if cell.ctype is XL_CELL_TEXT:
                 self.wb.sheets()
                 if not self.tb:
                     self.tb = copy(self.wb)
         if self.tb:
-            plain = easyxf('')
+            plain = easyxf("")
             self.tb.get_sheet(my_sheet_index).write(int(row), int(column), value, plain)
 
     def put_date_to_cell(self, sheetname, column, row, value):
@@ -415,12 +431,12 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*           |  *Parameters*                                                               |
-        | Open Excel           |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |     |     |            |
+        | Open Excel           |  .\\ExcelRobotTest.xls  |     |     |            |
         | Put Date To Cell     |  TestSheet1                                        |  0  |  0  |  12.3.1999 |
 
         """
         if self.wb:
-            my_sheet_index = self.sheetNames.index(sheetname)
+            my_sheet_index = self.sheet_names.index(sheetname)
             cell = self.wb.get_sheet(my_sheet_index).cell(int(row), int(column))
             if cell.ctype is XL_CELL_DATE:
                 self.wb.sheets()
@@ -428,11 +444,11 @@ class ExcelLibrary:
                     self.tb = copy(self.wb)
         if self.tb:
             print(value)
-            dt = value.split('.')
+            dt = value.split(".")
             dti = [int(dt[2]), int(dt[1]), int(dt[0])]
             print(dt, dti)
             ymd = datetime(*dti)
-            plain = easyxf('', num_format_str='d.M.yyyy')
+            plain = easyxf("", num_format_str="d.M.yyyy")
             self.tb.get_sheet(my_sheet_index).write(int(row), int(column), ymd, plain)
 
     def modify_cell_with(self, sheetname, column, row, op, val):
@@ -448,20 +464,22 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*           |  *Parameters*                                                               |
-        | Open Excel           |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |     |     |     |      |
+        | Open Excel           |  .\\ExcelRobotTest.xls  |     |     |     |      |
         | Modify Cell With     |  TestSheet1                                        |  0  |  0  |  *  |  56  |
 
         """
-        my_sheet_index = self.sheetNames.index(sheetname)
+        my_sheet_index = self.sheet_names.index(sheetname)
         cell = self.wb.get_sheet(my_sheet_index).cell(int(row), int(column))
         curval = cell.value
         if cell.ctype is XL_CELL_NUMBER:
             self.wb.sheets()
             if not self.tb:
                 self.tb = copy(self.wb)
-            plain = easyxf('')
+            plain = easyxf("")
             modexpr = str(curval) + op + val
-            self.tb.get_sheet(my_sheet_index).write(int(row), int(column), eval(modexpr), plain)
+            self.tb.get_sheet(my_sheet_index).write(
+                int(row), int(column), eval(modexpr), plain
+            )
 
     def add_to_date(self, sheetname, column, row, numdays):
         """
@@ -475,11 +493,11 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*           |  *Parameters*                                                        |
-        | Open Excel           |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |     |     |     |
+        | Open Excel           |  .\\ExcelRobotTest.xls  |     |     |     |
         | Add To Date          |  TestSheet1                                        |  0  |  0  |  4  |
 
         """
-        my_sheet_index = self.sheetNames.index(sheetname)
+        my_sheet_index = self.sheet_names.index(sheetname)
         cell = self.wb.get_sheet(my_sheet_index).cell(int(row), int(column))
         if cell.ctype is XL_CELL_DATE:
             self.wb.sheets()
@@ -487,8 +505,10 @@ class ExcelLibrary:
                 self.tb = copy(self.wb)
             curval = datetime(*xldate_as_tuple(cell.value, self.wb.datemode))
             newval = curval + timedelta(int(numdays))
-            plain = easyxf('', num_format_str='d.M.yyyy')
-            self.tb.get_sheet(my_sheet_index).write(int(row), int(column), newval, plain)
+            plain = easyxf("", num_format_str="d.M.yyyy")
+            self.tb.get_sheet(my_sheet_index).write(
+                int(row), int(column), newval, plain
+            )
 
     def subtract_from_date(self, sheetname, column, row, numdays):
         """
@@ -502,11 +522,11 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*           |  *Parameters*                                                        |
-        | Open Excel           |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |     |     |     |
+        | Open Excel           |  .\\ExcelRobotTest.xls  |     |     |     |
         | Subtract From Date   |  TestSheet1                                        |  0  |  0  |  7  |
 
         """
-        my_sheet_index = self.sheetNames.index(sheetname)
+        my_sheet_index = self.sheet_names.index(sheetname)
         cell = self.wb.get_sheet(my_sheet_index).cell(int(row), int(column))
         if cell.ctype is XL_CELL_DATE:
             self.wb.sheets()
@@ -514,13 +534,15 @@ class ExcelLibrary:
                 self.tb = copy(self.wb)
             curval = datetime(*xldate_as_tuple(cell.value, self.wb.datemode))
             newval = curval - timedelta(int(numdays))
-            plain = easyxf('', num_format_str='d.M.yyyy')
-            self.tb.get_sheet(my_sheet_index).write(int(row), int(column), newval, plain)
+            plain = easyxf("", num_format_str="d.M.yyyy")
+            self.tb.get_sheet(my_sheet_index).write(
+                int(row), int(column), newval, plain
+            )
 
-    def save_excel(self, filename, useTempDir=False):
+    def save_excel(self, filename, use_tempdir=False):
         """
-        Saves the Excel file indicated by file name, the useTempDir can be set to true if the user needs the file saved in the temporary directory.
-        If the boolean useTempDir is set to true, depending on the operating system of the computer running the test the file will be saved in the Temp directory if the operating system is Windows or tmp directory if it is not.
+        Saves the Excel file indicated by file name, the use_tempdir can be set to true if the user needs the file saved in the temporary directory.
+        If the boolean use_tempdir is set to true, depending on the operating system of the computer running the test the file will be saved in the Temp directory if the operating system is Windows or tmp directory if it is not.
 
         Arguments:
                 |  File Name (string)                      | The name of the of the file to be saved.  |
@@ -528,13 +550,13 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*           |  *Parameters*                                      |
-        | Open Excel           |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |
+        | Open Excel           |  .\\ExcelRobotTest.xls  |
         | Save Excel           |  NewExcelRobotTest.xls                             |
 
         """
-        if useTempDir is True:
-            print '*DEBUG* Got fname %s' % filename
-            self.tb.save(os.path.join("/", self.tmpDir, filename))
+        if use_tempdir is True:
+            print(f"*DEBUG* Got fname {filename}")
+            self.tb.save(os.path.join("/", self.tmpdir, filename))
         else:
             self.tb.save(filename)
 
@@ -547,12 +569,12 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*                     |  *Parameters*                                      |
-        | Open Excel                     |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |
+        | Open Excel                     |  .\\ExcelRobotTest.xls  |
         | Save Excel Current Directory   |  NewTestCases.xls                                  |
 
         """
         workdir = os.getcwd()
-        print '*DEBUG* Got fname %s' % filename
+        print(f"*DEBUG* Got fname {filename}")
         self.tb.save(os.path.join(workdir, filename))
 
     def add_new_sheet(self, newsheetname):
@@ -564,7 +586,7 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*           |  *Parameters*                                      |
-        | Open Excel           |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |
+        | Open Excel           |  .\\ExcelRobotTest.xls  |
         | Add New Sheet        |  NewSheet                                          |
 
         """
@@ -580,7 +602,7 @@ class ExcelLibrary:
         Example:
 
         | *Keywords*           |  *Parameters*                                      |
-        | Open Excel           |  C:\\Python27\\ExcelRobotTest\\ExcelRobotTest.xls  |
+        | Open Excel           |  .\\ExcelRobotTest.xls  |
         | Create Excel         |  NewExcelSheet                                     |
 
         """
