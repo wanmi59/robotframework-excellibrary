@@ -1,31 +1,41 @@
+================================================
 robotframework-excellibrary for Robot Framework
-==================================================
+================================================
 
 
 Introduction
-------------
+============
 
-Robotframework-excellibrary is a Robot Framework Library that provides keywords to allow opening, reading, writing and saving Excel files. The robotframework-excellibrary leverages two other python libraries [xlutils](https://pypi.python.org/pypi/xlutils/1.7.1) and [natsort](https://pypi.python.org/pypi/natsort/3.3.0). Xlutils installs [xlrd](https://pypi.python.org/pypi/xlrd) that reads data from an Excel file and [xlwt](https://pypi.python.org/pypi/xlwt) that can write to an Excel file.
+Robotframework-excellibrary is a Robot Framework Library that provides keywords to allow opening, reading, writing and saving Excel files (xls). 
+The robotframework-excellibrary leverages two other python libraries xlutils_ and natsort_. Xlutils installs xlrd_ that reads data from an Excel file and xlwt_ write to an Excel file.
 
+.. _xlutils: https://xlutils.readthedocs.io/en/latest/
+.. _natsort: https://natsort.readthedocs.io/en/8.1.0/
+.. _xlrd: https://xlrd.readthedocs.io/en/latest/
+.. _xlwt: https://xlwt.readthedocs.io/en/latest/
 
-- Information about robotframework-excellibrary keywords can be found on the [ExcelLibrary-Keyword Documentation](http://navinet.github.io/robotframework-excellibrary/ExcelLibrary-KeywordDocumentation.html) page.
-- Information about working with Excel files in Python can be found on the [Python Excel](http://www.python-excel.org/) page.
-- Useful pdf for practical use with Excel files [here](http://www.simplistix.co.uk/presentations/python-excel.pdf).
+- Information about robotframework-excellibrary keywords can be found on the `ExcelLibrary-Keyword Documentation`_ page.
+- Information about working with Excel files in Python can be found on the `Python Excel`_ page.
+- Useful pdf for practical use with Excel files here_.
+
+.. _`ExcelLibrary-Keyword Documentation`: http://navinet.github.io/robotframework-excellibrary/ExcelLibrary-KeywordDocumentation.html
+.. _`Python Excel`: http://www.python-excel.org/
+.. _here: http://www.simplistix.co.uk/presentations/python-excel.pdf
 
 
 Requirements
-------------
-* Python 2.7.4 (Newer versions not tested)
-* Robot Framework 2.8.5 (Newer versions not tested)
-* xlutils 1.7.1 (Newer versions not tested). Access the downloads [here](https://pypi.python.org/pypi/xlutils/1.7.1), or use pip install xlutils.
-* natsort 3.3.0 (Newer versions not tested). Access the downloads [here](https://pypi.python.org/pypi/natsort/3.3.0), or use pip install natsort.
+============
+* Python 3.7.x (Newer versions not tested)
 
 
 Installation
+============
+Using pip
 ------------
-#### Using pip ####
 
-The recommended installation tool is [pip](http://pip-installer.org).
+The recommended installation tool is pip_.
+
+.. _pip: http://pip-installer.org
 
 Install pip.
 Enter the following:
@@ -41,46 +51,30 @@ To install a specific version enter:
 
     pip install robotframework-excellibrary==(DesiredVersion)
 
-#### Manual Installation ####
+Manual Installation
+-------------------
 
 To install robotframework-excellibrary manually, install all dependency libraries before installing robotframework-excellibrary.
 
-1) Install [Robot Framework installed](http://code.google.com/p/robotframework/wiki/Installation).
+#. Download source distributions (``*.tar.gz``) from here_.
+#. Open command line:
 
-2) Download source distributions (``*.tar.gz`` / ``*.zip``) for the library and its
-   dependencies.
+       pip install <tar.gz path>
 
-  robotframework-excellibrary and dependencies:
-
-   - [https://pypi.python.org/pypi/robotframework-excellibrary](https://pypi.python.org/pypi/robotframework-excellibrary)
-   - [https://pypi.python.org/pypi/xlutils/1.7.1](https://pypi.python.org/pypi/xlutils/1.7.1)
-   - [https://pypi.python.org/pypi/natsort/3.3.0](https://pypi.python.org/pypi/natsort/3.3.0)
-
-3) Extract each source distribution to a temporary location using 7zip (or your preferred zip program).
-
-4) Open command line and go to each directory that was created from extraction and install each project using:
-
-       python setup.py install
-
-#### Uninstall ####
+Uninstall
+=========
 
 To uninstall robotframework-excellibrary use the following pip command: 
 
     pip uninstall robotframework-excellibrary
 
-However, if the package was installed manually it will need to be uninstalled manually:
-
-1) Navigate to ``C:\Python27\ExcelRobotTest`` and delete ExcelRobotTest.txt,  and ExcelLibrary-KeywordDocumentation.html
-
-2) Navigate to ``C:\Python27\Lib\site-packages`` and delete robotframework-excellibrary-0.0.2-py2.7.egg-info and the folder ``robotframework-excellibrary``
-
 Directory Layout
-----------------
+================
 
 *ExcelLibrary/ExcelLibrary.py* :
     The Robot Python Library that makes use of the xlutils and natsort.
 
-*Tests/acceptance/ExcelRobotTest.txt* :
+*Tests/acceptance/ExcelRobotTest.robot* :
     Example test file to display what various keywords from robotframework-excellibrary accomplish
 
 *doc/ExcelLibrary-KeywordDocumentation.html* :
@@ -88,38 +82,45 @@ Directory Layout
 
 
 Usage
------
+=====
 
 To write tests with Robot Framework and robotframework-excellibrary, 
 ExcelLibrary must be imported into your Robot test suite.
-See [Robot Framework User Guide](http://code.google.com/p/robotframework/wiki/UserGuide) for more information.
+See *doc/ExcelLibrary-KeywordDocumentation.html* for more information.
 
 
 Running the Demo
-----------------
+================
 
-The test file ExcelRobotTest.txt, is an easily executable test for Robot Framework using robotframework-excellibrary. 
-For in depth detail on how the keywords function, read the Keyword documentation found here : [Keyword Documentation](http://navinet.github.io/robotframework-excellibrary/ExcelLibrary-KeywordDocumentation.html)
+The test file ``ExcelRobotTest.robot``, is an easily executable test for Robot Framework using robotframework-excellibrary. 
+For in depth detail on how the keywords function, read the `Keyword documentation`_.
 
-To run the test navigate to the Tests directory in C:\Python folder. Open a command prompt within the *Tests/acceptance* folder and run:
+.. _`Keyword documentation`: http://navinet.github.io/robotframework-excellibrary/ExcelLibrary-KeywordDocumentation.html
 
-    pybot ExcelRobotTest.txt
+To run the test, open a command prompt within the *Tests/acceptance* folder and run:
+
+    robot ExcelRobotTest.robot
 
 
 Things to Note When Using robotframework-excellibrary
------------------------------------
+=====================================================
 
 * When using the keyword *Add New Sheet* the user cannot perform any functions before or after this keyword on the currently open workbook. The changes that other
-keywords make will not be saved when the keyword *Add New Sheet* is used. They must add a sheet then save the workbook before using any other keyword.
-If they want to use any other keywords on the workbbok they must open the workbook again to do so.
-* We cannot use xlsx files as this has not been implemented in the xlrd library. Further information can be [found here](http://stackoverflow.com/questions/13892307/python-xlutils-formatting-info-true-not-yet-implemented) and discussed [here](https://groups.google.com/forum/#!msg/python-excel/w2AoQkX3TZc/1qjT1KzwoUsJ). To get round this issue, the user can save the excel files with the xls extension, this is a Microsoft Excel 97-2003 Worksheet.
+  keywords make will not be saved when the keyword *Add New Sheet* is used. They must add a sheet then save the workbook before using any other keyword.
+  If they want to use any other keywords on the workbbok they must open the workbook again to do so.
+* We cannot use xlsx files as this has not been implemented in the xlrd library. To get round this issue, consider using `robotframework-excellib`_.
+
+.. _`robotframework-excellib`: https://pypi.org/project/robotframework-excellib/
 
 
 Getting Help
-------------
-The [user group for Robot Framework](http://groups.google.com/group/robotframework-users) is the best place to get help. Include in the post:
+============
+The `user group for Robot Framework`_ is the best place to get help. Include in the post:
 
-- Contact the [Python-Excel google group](https://groups.google.com/forum/#!forum/python-excel)
+- Contact the `Python-Excel google group`_
 - Full description of what you are trying to do and expected outcome
 - Version number of robotframework-excellibrary and Robot Framework
 - Traceback or other debug output containing error information
+
+.. _`user group for Robot Framework`: http://groups.google.com/group/robotframework-users
+.. _`Python-Excel google group`: https://groups.google.com/forum/#!forum/python-excel
