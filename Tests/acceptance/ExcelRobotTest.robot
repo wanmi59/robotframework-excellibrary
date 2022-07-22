@@ -5,7 +5,7 @@ Library 			Collections
 *** Variables ***
 ${Names}
 ${Num}
-${Excel_File_Path}   C:\\Python27\\ExcelRobotTest\\
+${Excel_File_Path}   .\\
 ${SheetName}         Graph Data
 ${NewSheetName}      NewSheet
 
